@@ -8,6 +8,15 @@
     "dist",
     "src"
   ],
+  "keywords": [
+    "分批加载",
+    "滚动加载",
+    "虚拟滚动",
+    "列表滚动加载",
+    "react",
+    "list",
+    "virtual list"
+  ],
   "engines": {
     "node": ">=10"
   },
