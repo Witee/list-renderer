@@ -38,12 +38,13 @@ const ListRenderer = (props: Props): JSX.Element => {
   const [hasMore, setHasMore] = useState(!(children.length <= pageSize));
   const [page, setPage] = useState(0);
 
+  // 核心代码: 计算还有多少可滚动的距离(offset), 当 offset 为 0 时设置新的分页触发加载
   const addEventListener = () => {
     const offset = ref.current.scrollHeight - ref.current.scrollTop - ref.current.clientHeight;
 
     if (offset <= 0) {
       setLoading(true);
-      setPage((p) => p + 1);
+      setPage(p => p + 1);
     }
   };
 
@@ -59,7 +60,7 @@ const ListRenderer = (props: Props): JSX.Element => {
 
       const els = children.slice(start, end);
 
-      setCurrent((curr) => ([] as JSX.Element[]).concat(curr, els));
+      setCurrent(curr => ([] as JSX.Element[]).concat(curr, els));
 
       if (els.length < pageSize) {
         // hasMore 由 true 变为 false 时才需要回调

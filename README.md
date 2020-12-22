@@ -1,5 +1,7 @@
 # list-renderer
 
+> 基础知识: [与 scroll 相关的方法](https://github.com/Witee/keep-learning/issues/12)
+
 批量渲染列表, 优化性能.
 
 应用场景:
@@ -18,9 +20,8 @@
 
 [demo](https://codesandbox.io/s/list-renderer-basic-cyygg?file=/src/App.tsx)
 
-#### 使用` refreshKey` 的情况:
+#### 使用`refreshKey` 的情况:
 
 [demo](https://codesandbox.io/s/blissful-wood-3wwtz)
 
-如果是一个列表, 如果 `a[]` 在做为` useEffect` 的依赖时, 会认为每次都是个新的对象, 这里将`key`转换为字符串 `refreshKey={_items.map((i) => i.key).join()` 作为依赖参数, 可以解决这个问题.
-
+如果是一个列表, 如果 `a[]` 在做为`useEffect` 的依赖时, 会认为每次都是个新的对象, 这里将`key`转换为字符串 `refreshKey={_items.map((i) => i.key).join()` 作为依赖参数, 可以解决这个问题.
