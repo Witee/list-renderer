@@ -38,7 +38,9 @@ const ListRenderer = (props: Props): JSX.Element => {
   const [hasMore, setHasMore] = useState(!(children.length <= pageSize));
   const [page, setPage] = useState(0);
 
-  // 核心代码: 计算还有多少可滚动的距离(offset), 当 offset 为 0 时设置新的分页触发加载
+  /**
+   * 核心代码: 计算还有多少可滚动的距离(offset), 当 offset 为 0 时设置新的分页触发加载
+   */
   const addEventListener = () => {
     const offset = ref.current.scrollHeight - ref.current.scrollTop - ref.current.clientHeight;
 
@@ -48,35 +50,52 @@ const ListRenderer = (props: Props): JSX.Element => {
     }
   };
 
+  /**
+   * 监听滚动事件
+   */
   useEffect(() => {
     ref.current?.addEventListener('scroll', addEventListener);
+
+    return () => {
+      ref.current?.removeEventListener('scroll', addEventListener);
+    };
     // eslint-disable-next-line
   }, []);
 
+  /**
+   * load more effect: 当分页变化时将下一批数据加载进来
+   */
   useEffect(() => {
-    if (page > 0) {
-      const start = page * pageSize;
-      const end = start + pageSize;
+    // 只处理第二页开始的, 因为第一页已经在 init effect 中处理过了
+    // 没有将 init effect 中的添加第一批数据放进来是因为 refreshKey 变化时只需要更新 children
+    if (page <= 0) return;
 
-      const els = children.slice(start, end);
+    const start = page * pageSize;
+    const end = start + pageSize;
 
-      setCurrent(curr => ([] as JSX.Element[]).concat(curr, els));
+    const els = children.slice(start, end);
 
-      if (els.length < pageSize) {
-        // hasMore 由 true 变为 false 时才需要回调
-        hasMore && onFinish && onFinish();
+    setCurrent(curr => ([] as JSX.Element[]).concat(curr, els));
 
-        setHasMore(false);
-      } else {
-        setHasMore(true);
-      }
+    if (els.length < pageSize) {
+      // hasMore 由 true 变为 false 时才需要回调
+      hasMore && onFinish && onFinish();
 
-      setLoading(false);
+      setHasMore(false);
+    } else {
+      setHasMore(true);
     }
+
+    setLoading(false);
+
     // eslint-disable-next-line
   }, [page]);
 
+  /**
+   * init effect: 仅当 refreshKey 改变时恢复为初始状态
+   */
   useEffect(() => {
+    // 加载初始数据
     const init = children.slice(0, pageSize);
     setCurrent(init);
 
@@ -86,6 +105,7 @@ const ListRenderer = (props: Props): JSX.Element => {
       setHasMore(true);
     }
 
+    // 将滚动条设置到起始位置
     ref.current?.scroll(0, 0);
     // eslint-disable-next-line
   }, [refreshKey]);
