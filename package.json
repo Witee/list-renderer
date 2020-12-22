@@ -57,12 +57,14 @@
     }
   ],
   "dependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
+  "devDependencies": {
     "@size-limit/preset-small-lib": "^4.9.1",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "husky": "^4.3.6",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
     "size-limit": "^4.9.1",
     "tsdx": "^0.14.1",
     "tslib": "^2.0.3",
